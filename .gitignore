@@ -1,0 +1,14 @@
+﻿venv/
+__pycache__/
+*.pyc
+*.pyo
+data/weights/*.pt
+data/weights/*.pth
+data/weights/*.onnx
+data/demo/*.mp4
+data/demo/*.jpg
+data/demo/*.png
+runs/
+*.egg-info/
+.idea/
+.vscode/

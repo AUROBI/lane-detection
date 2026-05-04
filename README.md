@@ -1,172 +1,178 @@
+# Lane Detection — AUROBI / Teknofest 2025 Robotaksi
 
-<div align="center">
-<h1> YOLOPv2:rocket:: Better, Faster, Stronger for Panoptic driving Perception </h1>
-<!-- <--!span><font size="5", > Efficient and Robust 2D-to-BEV Representation Learning via Geometry-guided Kernel Transformer
-</font></span> -->
+> **YOLOPv2 + CLRNet** tabanli gercek zamanli serit takip sistemi  
+> Teknofest 2025 Robotaksi Yarismasi — Hazir Arac Kategorisi  
+> Hedef arac: **Bee1** (Beemobs) | Kamera: **ZED2 Stereo** | IMU: **XSENS MTI-680**
 
-  Cheng Han, Qichao Zhao, Shuyi Zhang, Yinzi Chen, Zhenlin Zhang, Jinwei Yuan
-<!-- <a href="https://scholar.google.com/citations?user=pCY-bikAAAAJ&hl=zh-CN">Jinwei Yuan</a> -->
-<div><a href="https://arxiv.org/abs/2208.11434">[YOLOPv2 arXiv Preprint]</a></div> 
+---
 
-</div>
+## Mimari
 
-## News
-* `August 30, 2022`: We've released the inference code / trained  <a href="https://github.com/CAIC-AD/YOLOPv2/releases/download/V0.0.1/yolopv2.pt">model</a> and published [![Hugging Face Spaces](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Spaces-blue)](https://huggingface.co/spaces/hank1996/yolopv2)[web demo](https://huggingface.co/spaces/hank1996/yolopv2), just enjoy it !
-
-* `August 24, 2022`: We've released the tech report for **YOLOPv2**. This work is still in progress and code/models are coming soon. Please stay tuned! ☕️
-<!-- * `August 26, 2022`: We've upload the model for **YOLOPv2**. This version support for model training, validation and prediction. -->
-
-## Introduction
-
-:grin:We present an excellent multi-task network based on YOLOP:blue_heart:,which is called **YOLOPv2: Better, Faster, Stronger for Panoptic driving Perception**.
-The advantages of **YOLOPv2** can be summaried as below:
-* **Better**:clap:: we proposed the end-to-end perception network which possess better feature extraction backbone, better bag-of-freebies were developed for dealing with the training process.
-* **Faster**:airplane:: we employed more efficient ELAN structures to achieve reasonable memory allocation for our  model. 
-* **Stronger**:muscle:: the proposed model has stable network design and has powerful robustness for adapting to various scenarios .
-
-[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/yolopv2-better-faster-stronger-for-panoptic/traffic-object-detection-on-bdd100k)](https://paperswithcode.com/sota/traffic-object-detection-on-bdd100k?p=yolopv2-better-faster-stronger-for-panoptic)
-[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/yolopv2-better-faster-stronger-for-panoptic/drivable-area-detection-on-bdd100k)](https://paperswithcode.com/sota/drivable-area-detection-on-bdd100k?p=yolopv2-better-faster-stronger-for-panoptic)
-[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/yolopv2-better-faster-stronger-for-panoptic/lane-detection-on-bdd100k)](https://paperswithcode.com/sota/lane-detection-on-bdd100k?p=yolopv2-better-faster-stronger-for-panoptic)
-
-## Results
-We used the BDD100K as our datasets,and experiments are run on **NVIDIA TESLA V100**.
-
-
-### Web Demo
-
-- Integrated into [Huggingface Spaces 🤗](https://huggingface.co/spaces/hank1996/yolopv2) using Gradio. Try out the Web Demo !
-
-### Visualization
-model : trained on the BDD100k dataset and test on T3CAIC camera.
-<td><img src=data/demo/together_video.gif/></td>
-  
-  
-
-
-
-### Model parameter and inference speed
-|        Model       |    Size     |   Params   |  Speed (fps) |
-|:------------------:|:-----------:|:----------:|:-----------:|
-|       `YOLOP`      |     640     |    7.9M    |     49      |
-|     `HybridNets`   |     640     |    12.8M   |     28      |
-|    **`YOLOPv2`**   |     640     |  **38.9M** |   **91 (+42)** :arrow_double_up:   |
-
-
-### Traffic Object Detection Result
-<table>
-<tr><th>Result </th><th>Visualization</th></tr>
-<tr><td>
-  
-
-|        Model       |     mAP@0.5 (%)   |Recall (%)  |
-|:------------------:|:------------:|:---------------:|
-|     `MultiNet`     |        60.2      |   81.3     |  
-|      `DLT-Net`     |        68.4      |  89.4     |
-|   `Faster R-CNN`   |          55.6      | 77.2     |
-|      `YOLOv5s`     |         77.2      | 86.8     |
-|       `YOLOP`      |        76.5      | 89.2     |   
-|     `HybridNets`   |          77.3      | **92.8**   | 
-|    **`YOLOPv2`**   |       **83.4(+6.1)**:arrow_double_up:    |   91.1(-1.7)  :arrow_down:   |
-
-</td><td>
-
-<!-- ### Visualization -->
-<img src="data/demo/veh3.jpg" width="100%" align='right'/>
-<!--   <img src="images/veh2.jpg" width="50%" /> -->
-
-</td></tr> </table>
-
-### Drivable Area Segmentation
-<table>
-
-<tr><th>Result </th><th>Visualization</th></tr>
-<tr><td>
-
-|       Model      | Drivable mIoU (%) |——:relaxed:——|
-|:----------------:|:-----------------:|---:|
-|    `MultiNet`    |        71.6       |  |   
-|     `DLT-Net`    |        71.3       || 
-|     `PSPNet`     |        89.6       || 
-|      `YOLOP`     |        91.5       || 
-|     `HybridNets` |        90.5       || 
-|     `YOLOPv2`    |   **93.2(+1.7)** :arrow_up:  |  | 
-
-</td><td>
-
-<!-- ### Visualization -->
-<img src="data/demo/fs3.jpg" width="100%" align='right'/>
-<!--   <img src="images/fs2.jpg" width="50%" /> -->
-
-</td></tr> </table>
-
-### Lane Line Detection
-<table>
-<tr><th>Result </th><th>Visualization</th></tr>
-<tr><td>
-
-|      Model       | Accuracy (%) | Lane Line IoU (%) |
-|:----------------:|:------------:|:-----------------:|
-|      `Enet`      |     34.12    |       14.64       |
-|      `SCNN`      |     35.79    |       15.84       |
-|    `Enet-SAD`    |     36.56    |       16.02       |
-|      `YOLOP`     |     70.5     |        26.2       |
-|   `HybridNets`   |     85.4     |        **31.6**     |
-|    **`YOLOPv2`** |   **87.3(+1.9)**:arrow_up:   |      27.2(-4.4) :arrow_down: |
-  
-</td><td>
-
-<!-- ### Visualization -->
-<img src="data/demo/lane3.jpg" width="100%" align='right' />
-<!--   <img src="images/lane1.jpg" width="50%" /> -->
-
-</td></tr> </table>
-
-### Day-time and Night-time visualization results
-<div align = 'None'>
-  <a href="./">
-  <img src="data/demo/all3.jpg" width="45%" />
-  <img src="data/demo/all2.jpg" width="45%" />
-  <img src="data/demo/night1.jpg" width="45%" />
-  <img src="data/demo/night2.jpg" width="45%" />
-  </a>
-</div>
-
-
-
-## Models
-
-You can get the model from <a href="https://github.com/CAIC-AD/YOLOPv2/releases/download/V0.0.1/yolopv2.pt">here</a>.
-
-
-### Demo Test
-
-We provide two testing method.You can store the image or video.
-
-```shell
-python demo.py  --source data/example.jpg
+```
+Kamera Goruntüsü
+      |
+      +---> YOLOPv2 -------> Drivable Area Maskesi (yesil overlay)
+      |
+      +---> CLRNet  -------> Serit Cizgileri + Polinom Fit
+                    |
+                    v
+            Lane Metrics Pipeline
+                    |
+                    v
+         17 Metrik (piksel + metre)  +  CSV  +  Gorsel
 ```
 
-<!-- ## Usage
-coming soon. -->
+---
 
+## Metrikler
 
-### Third Parties Resource  
+| # | Metrik | Birim |
+|---|--------|-------|
+| 1 | Serit sapma mesafesi | m / px |
+| 2 | Aracin serit merkezine yatay uzakligi | m / px |
+| 3 | Yaw acisi (arac - serit yonu) | derece |
+| 4 | Sol serit egriligi | m |
+| 5 | Sag serit egriligi | m |
+| 6 | Egrilik degisimi | m |
+| 7 | Serit genisligi | m / px |
+| 8 | Sol on teker - sol serit uzakligi | m |
+| 9 | Sag on teker - sag serit uzakligi | m |
+| 10 | Sol serit tipi | surekli / kesikli |
+| 11 | Sag serit tipi | surekli / kesikli |
+| 12 | Timestamp | s |
+| 13 | Aracin bulundugu serit | sol / merkez / sag |
+| 14 | Komsu sol serit varligi | var / yok |
+| 15 | Komsu sag serit varligi | var / yok |
+| 16 | Algilama mesafesi | m |
+| 17 | Guvenilirlik skoru | yuksek / dusuk |
 
-* YOLOPv2 NCNN C++ Demo: [YOLOPv2-ncnn](https://github.com/FeiGeChuanShu/YOLOPv2-ncnn) from [FeiGeChuanShu](https://github.com/FeiGeChuanShu/)
-* YOLOPv2 ONNX and OpenCV DNN Demo: [yolopv2-opencv-onnxrun-cpp-py](https://github.com/hpc203/yolopv2-opencv-onnxrun-cpp-py) from [hpc203](https://github.com/hpc203/)
+---
 
+## Dosya Yapisi
 
-## License
+```
+lane-detection/
+|
++-- lane_metrics.py          # Video metrik pipeline (YOLOPv2)
++-- lane_metrics_clrnet.py   # Video metrik pipeline (CLRNet + YOLOPv2)
++-- webcam_lane.py           # Gercek zamanli webcam / ZED2 akisi
++-- demo.py                  # Temel YOLOPv2 inference demo
+|
++-- utils/
+|   +-- utils.py             # YOLOPv2 yardimci fonksiyonlar
+|   +-- clrnet_infer.py      # CLRNet ONNX inference wrapper
+|
++-- configs/                 # CLRNet yapilandirma dosyalari
++-- data/
+|   +-- weights/             # Model agirliklari (git'e dahil degil)
+|   |   +-- yolopv2.pt       # YOLOPv2 pretrained
+|   |   +-- culane_r18.pth   # CLRNet pretrained
+|   +-- demo/                # Test videolari (git'e dahil degil)
+|
++-- requirements.txt
++-- README.md
+```
 
-YOLOPv2 is released under the [MIT Licence](LICENSE).
+---
 
-<!-- ## Citation
-If you find YOLOPv2 is useful in your research or applications, please consider giving us a star &#127775; and citing it by the following BibTeX entry.
-```bibtex
-@article{GeokernelTransformer,
-  title={Efficient and Robust 2D-to-BEV Representation Learning via Geometry-guided Kernel Transformer},
-  author={Chen, Shaoyu and Cheng, Tianheng and Wang, Xinggang and Meng, Wenming and Zhang, Qian and Liu, Wenyu},
-  journal={arXiv preprint arXiv:2206.04584},
-  year={2022}
-}
-``` -->
+## Kurulum
+
+### 1. Repo'yu klonla
+
+```bash
+git clone https://github.com/AUROBI/lane-detection.git
+cd lane-detection
+```
+
+### 2. Sanal ortam ve bagimliliklar
+
+```bash
+python -m venv venv
+venv\Scripts\activate          # Windows
+# source venv/bin/activate     # Linux/Mac
+
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
+pip install opencv-python numpy onnxruntime-gpu scipy tqdm pyyaml
+```
+
+### 3. Model agirliklarini indir
+
+**YOLOPv2:**
+```
+https://github.com/CAIC-AD/YOLOPv2/releases/download/V0.0.1/yolopv2.pt
+-> data/weights/yolopv2.pt
+```
+
+**CLRNet:**
+```
+PINTO model zoo uzerinden culane_r18 ONNX modeli
+-> data/weights/culane_r18.pth
+```
+
+---
+
+## Kullanim
+
+### Video uzerinde test (YOLOPv2 + CLRNet)
+
+```bash
+python lane_metrics_clrnet.py
+```
+
+Cikti: `runs/metrics_clrnet/output_clrnet.mp4` + `metrics_clrnet.csv`
+
+### Gercek zamanli webcam / ZED2
+
+```bash
+python webcam_lane.py
+```
+
+| Tus | Islem |
+|-----|-------|
+| Q | Cikis |
+| S | Ekran goruntüsü al |
+| R | Smoother sifirla |
+
+### Temel YOLOPv2 demo
+
+```bash
+python demo.py --source data/demo/test.mp4 --device 0
+```
+
+---
+
+## Arac Teknik Ozellikleri (Bee1)
+
+| Parametre | Deger |
+|-----------|-------|
+| On iz genisligi | 886 mm |
+| Arka iz genisligi | 850 mm |
+| Dingil mesafesi | 1860 mm |
+| Max hiz | 30 km/s (limitli) |
+| Kamera | ZED2 Stereo (685mm yukseklik) |
+| IMU | XSENS MTI-680-DK |
+| LIDAR | Velodyne VLP-16 |
+| GPU | NVIDIA RTX 3060 |
+| OS | Ubuntu 20.04 + ROS |
+
+---
+
+## Gereksinimler
+
+```
+torch >= 2.0
+torchvision
+opencv-python
+numpy
+onnxruntime-gpu
+scipy
+tqdm
+pyyaml
+```
+
+---
+
+## Takim
+
+**AUROBI** — Ankara Universitesi  
+Teknofest 2025 Robotaksi Yarismasi — Hazir Arac Kategorisi
