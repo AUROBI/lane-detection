@@ -15,7 +15,7 @@ from collections import deque
 ROOT = Path(__file__).parent
 sys.path.insert(0, str(ROOT))
 
-from utils.utils import LoadImages, driving_area_mask, select_device
+from utils.utils import LoadImages, driving_area_mask
 from utils.clrnet_infer import CLRNetPredictor
 
 # ── Araç / kamera sabitleri ───────────────────────────────────────────────
@@ -40,11 +40,11 @@ MIN_LANE_W_PX = 180
 MAX_LANE_W_PX = 950
 LANE_THRESH   = 0.30
 
-SOURCE  = 'data/demo/test_short.mp4'
-WEIGHTS = 'data/weights/yolopv2.pt'
-CLRNET  = 'data/weights/culane_r18.pth'
+SOURCE  = str(ROOT / 'data/demo/test_short.mp4')
+WEIGHTS = str(ROOT / 'data/weights/yolopv2.pt')
+CLRNET  = str(ROOT / 'data/weights/culane_r18.pth')
 IMG_SZ  = 640
-OUT_DIR = Path('runs/metrics_clrnet')
+OUT_DIR = ROOT / 'runs/metrics_clrnet'
 
 CSV_FIELDS = [
     'frame', 'timestamp',
@@ -315,8 +315,10 @@ def main():
     csv_path   = str(OUT_DIR / 'metrics_clrnet.csv')
 
     # YoloPv2
-    device = select_device('0')
-    half   = device.type != 'cpu'
+    device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
+    if not torch.cuda.is_available():
+        print("UYARI: CUDA bulunamadi, CPU modunda calisiliyor. FPS dusuk olabilir.")
+    half = device.type == 'cuda'
     yolo   = torch.jit.load(WEIGHTS).to(device)
     if half:
         yolo.half()
@@ -327,11 +329,12 @@ def main():
     with torch.no_grad():
         for _ in range(WARMUP_N):
             yolo(dummy)
-    torch.cuda.synchronize()
+    if half:
+        torch.cuda.synchronize()
 
     # CLRNet
     print("CLRNet yükleniyor...")
-    clrnet = CLRNetPredictor(CLRNET, device='cuda')
+    clrnet = CLRNetPredictor(CLRNET, device=str(device))
     clrnet.predict(np.zeros((720, 1280, 3), dtype=np.uint8))   # warmup
     print("Hazır! İşleniyor...\n")
 
