@@ -1,39 +1,26 @@
-# Usage: pip install -r requirements.txt
+# Lane Detection - AUROBI / Teknofest 2025
+# Python 3.11 + CUDA 12.1
 
-# Base ----------------------------------------
-matplotlib>=3.2.2
-numpy>=1.18.5
-opencv-python>=4.1.1
-Pillow>=7.1.2
-PyYAML>=5.3.1
-requests>=2.23.0
-scipy>=1.4.1
-torch==1.7.0
-torchvision==0.8.0
-tqdm>=4.41.0
-protobuf<4.21.3
+# PyTorch (CUDA 12.1)
+# pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
+torch>=2.0.0
+torchvision>=0.15.0
 
-# Logging -------------------------------------
-tensorboard>=2.4.1
-# wandb
+# Goruntu isleme
+opencv-python>=4.6.0
+numpy>=1.21.0
+Pillow>=9.0.0
 
-# Plotting ------------------------------------
-pandas>=1.1.4
-seaborn>=0.11.0
+# Model / inference
+onnxruntime-gpu>=1.14.0
 
-# Export --------------------------------------
-# coremltools>=4.1  # CoreML export
-# onnx>=1.9.0  # ONNX export
-# onnx-simplifier>=0.3.6  # ONNX simplifier
-# scikit-learn==0.19.2  # CoreML quantization
-# tensorflow>=2.4.1  # TFLite export
-# tensorflowjs>=3.9.0  # TF.js export
-# openvino-dev  # OpenVINO export
+# Yardimci
+scipy>=1.9.0
+tqdm>=4.64.0
+PyYAML>=6.0
+matplotlib>=3.5.0
+seaborn>=0.12.0
+pandas>=1.4.0
 
-# Extras --------------------------------------
-ipython  # interactive notebook
-psutil  # system utilization
-thop  # FLOPs computation
-# albumentations>=1.0.4
-# pycocotools>=2.0  # COCO mAP
-# roboflow
+# ROS2 entegrasyonu (Ubuntu 20.04 + ROS2 Humble)
+# pip install rclpy cv_bridge  (ROS2 kurulumundan gelir)
