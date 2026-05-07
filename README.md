@@ -176,3 +176,49 @@ pyyaml
 
 **AUROBI** — Ankara Universitesi  
 Teknofest 2025 Robotaksi Yarismasi — Hazir Arac Kategorisi
+
+---
+
+## Hizli Kurulum (Linux / Ubuntu 20.04)
+
+```bash
+git clone https://github.com/AUROBI/lane-detection.git
+cd lane-detection
+python -m venv venv
+source venv/bin/activate
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
+pip install opencv-python numpy onnxruntime-gpu scipy tqdm pyyaml
+python download_weights.py
+```
+
+---
+
+## ROS2 Kullanimi
+
+```bash
+source /opt/ros/humble/setup.bash
+pip install rclpy cv_bridge
+python ros2_lane_node.py
+```
+
+| Yon | Topic |
+|-----|-------|
+| Yayinlanan | `/perception/lane/state` |
+| Abone olunan | `/zed2/zed_node/left/image_rect_color` |
+
+---
+
+## Model Agirliklari
+
+Agirliklar git'e dahil degildir. Indirmek icin:
+
+```bash
+python download_weights.py
+```
+
+Manuel indirme:
+
+| Dosya | Kaynak |
+|-------|--------|
+| `yolopv2.pt` | https://github.com/CAIC-AD/YOLOPv2/releases/download/V0.0.1/yolopv2.pt |
+| `culane_r18.pth` | PINTO model zoo — 324_CLRNet |
