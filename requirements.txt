@@ -22,5 +22,12 @@ matplotlib>=3.5.0
 seaborn>=0.12.0
 pandas>=1.4.0
 
+# CLRNet bagimliliklari
+addict>=2.4.0
+yapf>=0.32.0
+einops>=0.6.0
+timm>=0.9.0
+imgaug>=0.4.0
+
 # ROS2 entegrasyonu (Ubuntu 20.04 + ROS2 Humble)
 # pip install rclpy cv_bridge  (ROS2 kurulumundan gelir)
