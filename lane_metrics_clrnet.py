@@ -51,8 +51,8 @@ CSV_FIELDS = [
     'lateral_offset_px', 'lateral_offset_m',
     'lane_centre_dist_px', 'lane_centre_dist_m',
     'yaw_deg',
-    'curv_left_px', 'curv_left_m',
-    'curv_right_px', 'curv_right_m',
+    'curv_left_px', 'curv_left_m', 'curv_left_raw',
+    'curv_right_px', 'curv_right_m', 'curv_right_raw',
     'curv_change',
     'lane_width_px', 'lane_width_m',
     'dist_left_wheel_m', 'dist_right_wheel_m',
@@ -172,9 +172,9 @@ def curvature_m(c):
 
 
 def curv_label(R_m):
-    if R_m is None or R_m > 200: return 'duz yol'
-    if R_m > 80:  return 'hafif viraj'
-    if R_m > 30:  return 'orta viraj'
+    if R_m is None or R_m > 500: return 'duz yol'
+    if R_m > 150: return 'hafif viraj'
+    if R_m > 50:  return 'orta viraj'
     return 'sert viraj'
 
 
@@ -280,14 +280,14 @@ def draw_panel(frame, m, fps):
     def f(v, unit=''):
         return '-' if v is None else (f"{v:.2f}{unit}" if isinstance(v, float) else f"{v}{unit}")
 
-    cl_lbl = curv_label(m['curv_left_m'])
-    cr_lbl = curv_label(m['curv_right_m'])
+    cl_lbl = curv_label(m['curv_left_raw'])
+    cr_lbl = curv_label(m['curv_right_raw'])
 
     put(f"FPS: {fps:.1f}  [CLRNet + YOLOPv2]",                                  0, (0, 220, 100))
     put(f"T: {m['timestamp']:.2f}s   F:{m['frame']}",                           1)
     put(f" 1. Sapma          : {f(m['lateral_offset_m'],'m')} / {f(m['lateral_offset_px'],'px')}", 2)
     put(f" 2. Merkez uzaklik : {f(m['lane_centre_dist_m'],'m')} / {f(m['lane_centre_dist_px'],'px')}", 3)
-    put(f" 3. Yaw acisi      : {f(m['yaw_deg'],'°')}",                          4)
+    put(f" 3. Yaw acisi      : {f(m['yaw_deg'],'deg')}",                        4)
     put(f" 4. Sol egrilik    : {f(m['curv_left_m'],'m')}  [{cl_lbl}]",          5)
     put(f" 5. Sag egrilik    : {f(m['curv_right_m'],'m')}  [{cr_lbl}]",         6)
     put(f" 6. Egrilik degisim: {f(m['curv_change'],'m')}",                      7)
@@ -418,10 +418,12 @@ def main():
                 yaw_s = sm['yaw_deg'].update(calc_yaw(left_c, right_c))
 
                 # ── Eğrilik ──
-                cl_px = sm['curv_left_px'].update(curvature_px(left_c))
-                cr_px = sm['curv_right_px'].update(curvature_px(right_c))
-                cl_m  = sm['curv_left_m'].update(curvature_m(left_c))
-                cr_m  = sm['curv_right_m'].update(curvature_m(right_c))
+                cl_px      = sm['curv_left_px'].update(curvature_px(left_c))
+                cr_px      = sm['curv_right_px'].update(curvature_px(right_c))
+                cl_m_raw   = curvature_m(left_c)
+                cr_m_raw   = curvature_m(right_c)
+                cl_m       = sm['curv_left_m'].update(cl_m_raw)
+                cr_m       = sm['curv_right_m'].update(cr_m_raw)
 
                 avg_c = ((cl_m + cr_m) / 2.0 if (cl_m and cr_m) else cl_m or cr_m)
                 curv_chg = None
@@ -483,8 +485,10 @@ def main():
                     'yaw_deg':             yaw_s,
                     'curv_left_px':        cl_px,
                     'curv_left_m':         cl_m,
+                    'curv_left_raw':       cl_m_raw,
                     'curv_right_px':       cr_px,
                     'curv_right_m':        cr_m,
+                    'curv_right_raw':      cr_m_raw,
                     'curv_change':         curv_chg,
                     'lane_width_px':       lw_px,
                     'lane_width_m':        lw_m,
